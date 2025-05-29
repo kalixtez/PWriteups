@@ -128,7 +128,7 @@ The final bit of code in the request's flow is this:
   cVar2 = extension_is_allowed(big_buffer);
   if (cVar2 == '\x01') {
 	*(undefined8 *)(puVar6 + -0x1938) = 0x402c64;
-	pcVar5 = strstr("..",big_buffer + 0xf42e0); // hmmm, looks like bait
+	pcVar5 = strstr("..",big_buffer + 0xf42e0); // holy friggin bait
 	if (pcVar5 == (char *)0x0) {
 	  *(undefined8 *)(puVar6 + -0x1938) = 0x402c89;
 	  build_http_response(big_buffer);
