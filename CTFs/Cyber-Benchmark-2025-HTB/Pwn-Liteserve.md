@@ -174,7 +174,7 @@ Finally, we get to the core of the exploit, remember that `PRIV_MODE` environmen
   } while( true );
 }
 ```
-So what does this loop do? It iterates comparing the request's path extension to the server's supported extensions, html, htm, txt... etc. If there's a match, it returns `1`, if it matches none of them, it returns `0`. We want it to return `1`, given that it is the only way we can access [this conditional](#The%20final%20stage%20and%20a%20tricky%20function%20call), so a valid extension has to be provided. In the loop, `local_58` is used as the "limiter" for valid extensions. We can see that there's a few of them, but only the first two (html and htm) will be valid, because `local_58` is set to 2. If it was 3 or greater, txt would also become a valid extension, given `local_48[2]` (txt) would be used in one of the iterations of the loop.
+So what does this loop do? It iterates comparing the request's path extension to the server's supported extensions, html, htm, txt... etc. If there's a match, it returns `1`, if it matches none of them, it returns `0`. We want it to return `1`, given that it is the only way we can access [this conditional](#The-final-stage-and-a-tricky-function-call), so a valid extension has to be provided. In the loop, `local_58` is used as the "limiter" for valid extensions. We can see that there's a few of them, but only the first two (html and htm) will be valid, because `local_58` is set to 2. If it was 3 or greater, txt would also become a valid extension, given `local_48[2]` (txt) would be used in one of the iterations of the loop.
 
 The only way for this to happen is for the `PRIV_MODE` variable to be equal to "ON"... but we do not have access to that variable...
 
