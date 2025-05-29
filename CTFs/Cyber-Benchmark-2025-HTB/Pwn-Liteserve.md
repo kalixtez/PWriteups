@@ -117,7 +117,7 @@ All those locations are contiguous 128 byte buffers. Anything beyond the 128th b
 	//[...]
 ```
 
-This is a bit hard to read because this is using Ghidra's decompiler, but in summary:
+This is a bit hard to read because it's using Ghidra's decompiler, but in summary:
 
 If the header we are currently parsing is `User-Agent`, the first 4 characters of this header are "curl" and more importantly, the `0x1e88f4` flag is NOT null, then the `printf(pcVar6)` line is reachable. This line will literally print the content of the `User-Agent` header, which is user-controlled. Come to this point, we have a buffer overflow that enables a format-string attack, so we'd just need a way to leverage the format-string attack to get the server to send back the flag. How to do this?
 
