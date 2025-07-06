@@ -136,9 +136,9 @@ The final bit of code in the request's flow is this:
 	}
   }
 ```
-Something might immediately catch your eye here, yes, in line `pcVar5 = strstr("..",big_buffer + 0xf42e0);` the arguments for `strstr` are inverted. This means that the check for the existence of climb-out path segment `..` inside the final path won't work. Meaning you can send something like this `/index.html/../flag.txt`. That would work, if `index.html` was a file, that is.
+Something might immediately catch your eye here, yes, in line `pcVar5 = strstr("..",big_buffer + 0xf42e0);` the arguments for `strstr` are inverted. This means that the check for the existence of climb-out path segment `..` inside the final path won't work. Meaning you could send something like this `/index.html/../ctf/flag.txt`, and it wouldn't trigger a "Bad Input" reply. That would work, if `index.html` was a file, that is.
 
-I spotted this mistake before I did spot the overflow in `get_mime_type` so I thought that was the way to proceed. It wasn't. It had me fooled for a while before giving up and continuing the search for other possible breaches. Turns out, that mistake in `strstr` isn't even used in the exploitation... Oh well.
+I spotted this mistake before I did spot the overflow in `get_mime_type` so I thought that was the way to proceed, thinking that there might be a directory ending in .htm or html in the server's working directory. It wasn't. It had me fooled for a while before giving up and continuing the search for other possible breaches. Turns out, that mistake in `strstr` isn't even used in the exploitation... Oh well.
 
 ## `extension_is_allowed`
 
