@@ -11,10 +11,14 @@
             "id": "0eba5b08a65f8bd4",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "CTFs/R3Kapig/Silent-profit.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Silent-profit"
             }
           }
         ]
@@ -166,6 +170,8 @@
   },
   "active": "0eba5b08a65f8bd4",
   "lastOpenFiles": [
+    "CTFs/R3Kapig/Evalgelist.md",
+    "CTFs/R3Kapig/Silent-profit.md",
     "CTFs/Cyber-Benchmark-2025-HTB/Pwn-Liteserve.md",
     "CTFs/Cyber-Benchmark-2025-HTB/Power-Greed-challenge.md",
     "CTFs/Cyber-Benchmark-2025-HTB/Loyalty-Madness.md",
