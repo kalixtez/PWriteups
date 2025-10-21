@@ -160,6 +160,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -170,10 +171,11 @@
   },
   "active": "0eba5b08a65f8bd4",
   "lastOpenFiles": [
-    "CTFs/R3Kapig/Evalgelist.md",
-    "CTFs/R3Kapig/Silent-profit.md",
-    "CTFs/Cyber-Benchmark-2025-HTB/Pwn-Liteserve.md",
     "CTFs/Cyber-Benchmark-2025-HTB/Power-Greed-challenge.md",
+    "CTFs/Cyber-Benchmark-2025-HTB/pwn_liteserve.png",
+    "CTFs/Cyber-Benchmark-2025-HTB/Pwn-Liteserve.md",
+    "CTFs/R3Kapig/Silent-profit.md",
+    "CTFs/R3Kapig/Evalgelist.md",
     "CTFs/Cyber-Benchmark-2025-HTB/Loyalty-Madness.md",
     "Machines/Escape-Two machine.md",
     "Untitled.canvas"
