@@ -103,7 +103,7 @@ void display_info(char *param_1)
 
 The thought that followed was: why not overwrite the GOT entry of one of those functions with that of system, and then get the process to call the overwritten function? That would end up calling `system(controllable_buffer)` and we'd simply put `/bin/sh\x00` in the controllable buffer, so we'd get a `system("/bin/sh")` it sounded good, so I went with it:
 
-#### Leaking an address in the binary:
+### Leaking an address in the binary:
 
 Let's take a look at the stack right before we call the vulnerable printf:
 
@@ -111,7 +111,7 @@ Let's take a look at the stack right before we call the vulnerable printf:
 
 Highlighted in pink is the address of our controllable buffer and in blue the return address of `display_info`. They are in positions 2 and 4 respectively, from the top (or bottom) of the stack. In order to leak them, we need format strings `"%7$lx"` and `"%9$lx"`, 7 and 9 because the first five arguments (`"%1$lx` to `"%5$lx`) are not in the stack, but in the registers `RSI`, `RDX`, `RCX`, `R8` and `R9`(remember this is the SysV ABI).
 
-#### Leaking strcpy@libc and system@libc
+### Leaking strcpy@libc and system@libc
 
 After leaking the return address of `display_info`, which returns to `main_connected` I calculated its offset from `strcpy`'s GOT entry:
 
@@ -129,7 +129,7 @@ Finally, we get `strcpy@libc`'s address, so we can compute `system@libc` by addi
 
 Except I lied a bit. Because in this version of libc `strcpy`'s address falls into a multiple of `0x100`, the first byte (LSB) will always be zero. So in reality, we need to skip over that one byte, and leak the rest, we multiply whatever we get by `0x100` to compensate for that one byte. The payload is thus "AAA%17$s" + (`strcpy@GOT` + 1).
 
-#### Overwriting the GOT
+### Overwriting the GOT
 
 We can now overwrite `strcpy`'s GOT entry:
 
@@ -148,7 +148,7 @@ send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b2, 18))
 
 Because they are both in the same binary, libc, they aren't that far off in memory, so it suffices to rewrite the last 3 bytes of `strcpy@libc` with the last 3 bytes of `system@libc`, as the rest of the address is the same.
 
-#### Getting to execute strcpy
+### Getting to execute strcpy
 
 Finally, we try to divert the flow of the application so it executes the `strcpy` that I showed you earlier. Because that call goes through the GOT, `system` will be invoked instead. There's a much, much, much easier way (so much that I facepalmed) of doing this than the way I did, but I'll show you how I did it regardless. When we first start the process, the `main_disconnected` function is called. This is the function that shows the simple "login, exit" menu. After "logging in", the rest of the time we will be executing `main_connected` and never execute `main_disconnected` again:
 
