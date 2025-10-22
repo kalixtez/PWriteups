@@ -19,7 +19,7 @@ Welcome back,
 >
 ```
 
-There isn't really much to see there, 4 options, and only one of them allows for user input, which is option number 2, change username. After entering '2\' we can then enter a string <b> up to 24 bytes long </b>. After which the menu will print yet again, only that this time it will print the username we entered in the welcome message. The print call that prints this username is not vulnerable, as we can see from the decompilation (I used Ghidra):
+There isn't really much to see there, 4 options, and only one of them allows for user input, which is option number 2, change username. After entering '2\' we can then enter a string <b> up to 24 bytes long </b>. After which the menu will print the same menu yet again, only that this time it will also print the username we entered, with the welcome message. The `printf` call that prints this username is not vulnerable, as we can see from the decompilation (I used Ghidra):
 
 ```c
 printf("\nWelcome back, %s\n",param_1);
@@ -37,7 +37,7 @@ void display_info(char *param_1)
 }
 ```
 
-The rest of the program didn't seem vulnerable, and the name of the challenge is "eformats" so it's almost granted that you have to use that string format vulnerability to beat it. So I started thinking what I should do in order to exploit this vulnerability. Before anything else though, the most important thing to figure out is the controllable buffer offset from the display_info function's stack frame. After a simple trial and error, we can see that the offset is 16s:
+The rest of the program didn't seem vulnerable, and the name of the challenge is "eformats" so it's almost granted that you have to use that string format vulnerability to beat it. So I started thinking what I should do in order to exploit this vulnerability. Before anything else though, the most important thing to figure out is the controllable buffer offset from the `display_info` function's stack frame. After a simple trial and error, we can see that the offset is 16:
 
 ```
 Welcome back, 
@@ -62,7 +62,7 @@ aaaaaaaa6161616161616161
 Password: ***
 ```
 
-Now, what can we do with that string format vulnerability? One thing that came to mind was to leak `system`'s address in libc and overwrite main's return address with it and then its first stack argument with the address of our controllable buffer, where we'd put `/bin/sh\x00`, but I soon remembered this is x86-64 and the first argument is passed through `RDI` and not the stack, so that wouldn't have worked. Maybe rewriting the address so it first jumps to a gadget that I could use to control `RDI`? Looking at the output of ROPgadget, one soon realizes that there isn't much we could use for that purpose. Then, I noticed there were a couple of libc's functions that were called using our controllable buffer as the first argument:
+Now, what can we do with that string format vulnerability? One thing that came to mind was to leak `system`'s address in libc and overwrite `main`'s return address with it and then its first stack argument with the address of our controllable buffer, where we'd put `/bin/sh\x00`. But I soon remembered this is x86-64 and the first argument is passed through `RDI` and not the stack, so that wouldn't have worked. Maybe rewriting the address so it first jumps to a gadget that I could use to control `RDI`? Looking at the output of ROPgadget, one soon realizes that there isn't much we could use for that purpose. Then, I noticed there were a couple of libc's functions that were called using our controllable buffer as the first argument:
 
 <b> strcpy: </b>
 
@@ -101,7 +101,7 @@ void display_info(char *param_1)
 
 ```
 
-The immediate thought that followed was: why not overwrite the GOT entry of one of those functions with that of system, and then get the process to call the overwritten function? That would end up calling `system(controllable_buffer)` and we'd simply put `/bin/sh\x00` in the controllable buffer, so we'd get a `system("/bin/sh")` it sounded good, so I went with it:
+The thought that followed was: why not overwrite the GOT entry of one of those functions with that of system, and then get the process to call the overwritten function? That would end up calling `system(controllable_buffer)` and we'd simply put `/bin/sh\x00` in the controllable buffer, so we'd get a `system("/bin/sh")` it sounded good, so I went with it:
 
 #### Leaking an address in the binary:
 
